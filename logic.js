@@ -1,11 +1,11 @@
 // Define a class Learner that will store leaner id, assingments and course id,
 //  as well as relevant getters
-let averageScore;
 class Learner {
     constructor(id) {
         this.id = id,
         this.allScoresArray = populateAllScores(this.id, LearnerSubmissions),
-        this.averageScore = populateAverageScore(this.allAssignments, getMaxScore())
+        this.averageScore = populateAverageScore(this.allScoresArray, maxScore),
+        this.allAssignments = populateAssignments(this.id);
     }
     getLearnerId() {
         return this.id;
@@ -208,15 +208,26 @@ function getMaxScore() { //returns current maximum score (200)
     return maxScore;
 }
 
-function populateAverageScore(allAssignmentsArray, maxScore) {
+function populateAverageScore(allScoresArray, maxScore) {
+    //initialize total score that will store sum of all scores
+    let totalScore = 0;
+    let allScoresArrayCopy = [...allScoresArray]; 
+
     //get sum of all learners scores
+    for(let score of allScoresArrayCopy) {
+        totalScore += score;
+    }
 
-    //get maximum of possible scores
+    // calculate average, round to 2 and convert back to a number
+    const averageScore = parseFloat((totalScore / maxScore).toFixed(2)); // result given in the sandbox is inconsistent, i use 2
 
-    // calculate average
-
-    //return
+    return averageScore;
   }
+
+function populateAssignments(learnerId) {
+    //should return an object for each assignment
+    // each assignment object should have assignment id and learner score
+}
 
   
   function getLearnerData(course, ag, submissions) {
@@ -231,21 +242,21 @@ function populateAverageScore(allAssignmentsArray, maxScore) {
     const result = [
       {
         id: 125,
-        avg: 0.985, // (47 + 150) / (50 + 150)
-        1: 0.94, // 47 / 50
-        2: 1.0 // 150 / 150
+        avg: 0.985, // (47 + 150) / (50 + 150)  <----- inconsistent precision of floats for avg
+        1: 0.94, // 47 / 50                <----- inconsistent precision of floats
+        2: 1.0 // 150 / 150                <----- inconsistent precision of floats
       },
       {
         id: 132,
-        avg: 0.82, // (39 + 125) / (50 + 150)
-        1: 0.78, // 39 / 50
-        2: 0.833 // late: (140 - 15) / 150
+        avg: 0.82, // (39 + 125) / (50 + 150)    <----- inconsistent precision of floats for avg
+        1: 0.78, // 39 / 50                <----- inconsistent precision of floats
+        2: 0.833 // late: (140 - 15) / 150 <----- inconsistent precision of floats
       }
     ];
   
     return result;
   }
-  
+  let maxScore = getMaxScore();
   const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   
 
