@@ -1,20 +1,26 @@
 // Define a class Learner that will store leaner id, assingments and course id,
 //  as well as relevant getters
 class Learner {
+    static instances = [];
+
     constructor(id) {
-        this.id = id,
-        this.allScoresArray = populateAllScores(this.id, LearnerSubmissions),
-        this.averageScore = populateAverageScore(this.allScoresArray, maxScore),
-        this.allAssignments = populateAssignments(this.id);
+        this.id = id;
+        this.allScores = populateAllScores(this.id, LearnerSubmissions);
+        this.averageScore = populateAverageScore(this.allScores, maxScore);
+        this.allAssignments = populateAssignments(this.allScores);
+        Learner.instances.push(this);
     }
     getLearnerId() {
         return this.id;
     }
+    getAverageScore() {
+        return this.averageScore;
+    }
     getLearnerAssignments() {
         return this.allAssignments;
     }
-    getLearnerCourseId() {
-        return this.course_id;
+    static getAllInstances() {
+        return Learner.instances;
     }
 }
 
@@ -115,7 +121,7 @@ const CourseInfo = {
 
     for(let learner of learnerIdArray) {
         learner = new Learner(learner);
-        console.log(learner);
+        // console.log(learner);
     }
   }
 
@@ -208,13 +214,13 @@ function getMaxScore() { //returns current maximum score (200)
     return maxScore;
 }
 
-function populateAverageScore(allScoresArray, maxScore) {
+function populateAverageScore(allScores, maxScore) {
     //initialize total score that will store sum of all scores
     let totalScore = 0;
-    let allScoresArrayCopy = [...allScoresArray]; 
+    let allScoresCopy = [...allScores]; 
 
     //get sum of all learners scores
-    for(let score of allScoresArrayCopy) {
+    for(let score of allScoresCopy) {
         totalScore += score;
     }
 
@@ -224,41 +230,73 @@ function populateAverageScore(allScoresArray, maxScore) {
     return averageScore;
   }
 
-function populateAssignments(learnerId) {
-    //should return an object for each assignment
-    // each assignment object should have assignment id and learner score
+function populateAssignments(allScores) {
+    //should return an object of assignments
+    // each assignment object should have id:learner score average
+
+
+    let allScoresCopy = [...allScores];
+    const assignments = {};
+    let id = 1;
+
+    for(let score of allScoresCopy) {
+        score = calculateAvgAssignmentScore(score, id);
+        assignments[id] = score;
+        id +=1;
+    }
+
+    return assignments;
 }
 
-  
-  function getLearnerData(course, ag, submissions) {
+function calculateAvgAssignmentScore(score, id) {
+    //get best possible points by slicing an object by id
+    let AssignmentGroupCopy = [...AssignmentGroup.assignments];
 
-    // get laerners id
-    // getLearnerId()
+    const maxPointsPossible = AssignmentGroupCopy.filter(assignment => assignment.id === id)
+    .map(assignment => assignment.points_possible);
 
-    //get learner average
+    const result = score / maxPointsPossible;
 
-    //get assignments that are due and display the percentage 
-    // that the learner scored on the assignment
-    const result = [
-      {
-        id: 125,
-        avg: 0.985, // (47 + 150) / (50 + 150)  <----- inconsistent precision of floats for avg
-        1: 0.94, // 47 / 50                <----- inconsistent precision of floats
-        2: 1.0 // 150 / 150                <----- inconsistent precision of floats
-      },
-      {
-        id: 132,
-        avg: 0.82, // (39 + 125) / (50 + 150)    <----- inconsistent precision of floats for avg
-        1: 0.78, // 39 / 50                <----- inconsistent precision of floats
-        2: 0.833 // late: (140 - 15) / 150 <----- inconsistent precision of floats
-      }
-    ];
-  
+    // console.log(`Average score is ${result}, learner score: ${score}, and id of assignment: ${id}`);
+
     return result;
-  }
-  let maxScore = getMaxScore();
-  const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+}
+
+function validInput() {
+    createLearner();
+    console.log(Learner.getAllInstances());
+}
   
+  function getLearnerData(course, AssignmentGroup, LearnerSubmissions) {
 
-console.log(createLearner());
+    let courseInfoName = ([...CourseInfo.name]).join('');
 
+    let AssignmentGroupCopy = [...AssignmentGroup.assignments];
+    let LearnerSubmissionsCopy = [...LearnerSubmissions];
+
+    if(course===courseInfoName){
+        validInput();
+    } else {
+        console.log(`Entered course ${course} is not a valid input.`);
+    }
+
+
+    // const result = [
+    //   {
+    //     id: 125,
+    //     avg: 0.985, // (47 + 150) / (50 + 150) 
+    //     1: 0.94, // 47 / 50                
+    //     2: 1.0 // 150 / 150              
+    //   },
+    //   {
+    //     id: 132,
+    //     avg: 0.82, // (39 + 125) / (50 + 150)    
+    //     1: 0.78, // 39 / 50              
+    //     2: 0.833 // late: (140 - 15) / 150 
+    //   }
+    // ];
+  }
+let maxScore = getMaxScore();
+const result = getLearnerData("Introduction to JavaScript", AssignmentGroup, LearnerSubmissions);
+  
+console.log(result);
