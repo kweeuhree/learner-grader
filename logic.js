@@ -4,9 +4,8 @@ let averageScore;
 class Learner {
     constructor(id) {
         this.id = id,
-        this.allAssignments = populateAllAssignments(this.id, LearnerSubmissions),
-        this.averageScore = averageScore,
-        this.course_id = this.course_id
+        this.allScoresArray = populateAllScores(this.id, LearnerSubmissions),
+        this.averageScore = populateAverageScore(this.allAssignments, getMaxScore())
     }
     getLearnerId() {
         return this.id;
@@ -14,7 +13,6 @@ class Learner {
     getLearnerAssignments() {
         return this.allAssignments;
     }
-
     getLearnerCourseId() {
         return this.course_id;
     }
@@ -37,7 +35,7 @@ const CourseInfo = {
         id: 1,
         name: "Declare a Variable",
         due_at: "2023-01-25",
-        points_possible: 50
+        points_possible: 50 
       },
       {
         id: 2,
@@ -121,43 +119,105 @@ const CourseInfo = {
     }
   }
 
-  function populateAllAssignments(learnerId, LearnerSubmissions) {
-    // if learnerId is the same as learner submission
-    // add all their scores to an array
+function populateAllScores(learnerId, LearnerSubmissions) { //populates assignments
 
-    //if submitted off take some scores off -------------------------------------------------------------------//
-    //checkSubmission(due_date, submission_date)
-    //calculatePenalty()
-    //---------------------------------------------------------------------------------------------------------//
+    // copy the array in order to keep it unchanged
     let LearnerSubmissionsCopy = LearnerSubmissions.slice();
     let assignmentsArray = [];
 
     for(let object of LearnerSubmissionsCopy) {
-        if(learnerId === object.learner_id && checkSubmission(due_date, object.submission[0])) {
+        //continue if due date is larger than today
+        if(isDueInTheFuture(object.assignment_id)) {
+            continue;
+        } else {
+         //if ids match, pass learner id, assignment id and submission date into a function that will return 
+        // whether the submission was on time
+        if(learnerId!==object.learner_id) {
+            continue
+        } else if(learnerId === object.learner_id && isSubmittedOntime(object.assignment_id, object.submission.submitted_at)) {
             //if on time push regular score
             assignmentsArray.push(object.submission.score);
+            // console.log('This score hasnt been adjusted: ', object.submission.score);
         } else {
             // deduct 10% and push adjusted score
-            let deductedScore = object.submission.score - (object.submission.score*0.1); 
+            let deductedScore = Math.floor(object.submission.score - (object.submission.score*0.1)); 
             assignmentsArray.push(deductedScore);
+            // console.log('This score has been adjusted: ', object.submission.score, ', Deducted score is: ',deductedScore);
         }
+      }
     }
     // console.log(`Assignments array after for loop: ${assignmentsArray}`);
     return assignmentsArray;
   }
 
-//   function populateAverageScore() {
+function isDueInTheFuture(assignmentId) { //checks date based on assignment ID
+    let isTrue;
 
-//   }
+    const today = new Date();
+    const dueDate = new Date(AssignmentGroup.assignments[assignmentId - 1].due_at);
 
-  function getLearnerAverage(LearnerSubmissions) {
-    // if learnerId is the same as learner submission
-    // add all their scores to an array
-    // divide the sum of the array by the number of its elements
-    // return average
-    const learnerIdArray = getLearnerIdArray(LearnerSubmissions); //returns [125, 132]
+    if(dueDate > today) {
+        isTrue = true;
+        // console.log('Returned true inside isDueIntheFuture()');
+    } else {
+        isTrue = false;
+        // console.log('Returned false inside isDueIntheFuture()');
+    }
+    return isTrue;
+}
 
+function isSubmittedOntime(assignmentId, submitted_at) { //checks if assignment was submitted on time
+    let isOnTime; 
+
+    const dueDate = new Date(AssignmentGroup.assignments[assignmentId - 1].due_at);
+    // console.log(`Due date for ${assignmentId} is ${dueDate}`)
+    const submittedDate = new Date(submitted_at);
+    // console.log(`It was submitted at ${submittedDate}, by a learner with id ${learnerId}`);
+
+    if(submittedDate <= dueDate) {
+        // console.log('returned true');
+        // console.log('---------------');
+        isOnTime = true;
+    } else {
+        // console.log('returned false');
+        // console.log('---------------');
+        isOnTime = false;
+    }
+
+   return isOnTime;
+}
+
+function getMaxScore() { //returns current maximum score (200)
+    let maxScore = 0;// initialize maxScore that will store current maximum score
+
+    // Copy the array of assignment objects from AssignmentGroup
+    let allAssignments = [...AssignmentGroup.assignments];
+
+     //loop through all assignments
+    for(let assignment of allAssignments) {
+    // if an assignment is due in the future, dont use it
+        if(!isDueInTheFuture(assignment.id)) {
+            // calculate maximum score of all due assignments
+            maxScore += assignment.points_possible;
+        } else {
+            // console.log('Im inside getMaxScore() \'else\' statement');
+            continue;
+        }
+    }
+    // console.log(maxScore);
+    return maxScore;
+}
+
+function populateAverageScore(allAssignmentsArray, maxScore) {
+    //get sum of all learners scores
+
+    //get maximum of possible scores
+
+    // calculate average
+
+    //return
   }
+
   
   function getLearnerData(course, ag, submissions) {
 
@@ -189,4 +249,5 @@ const CourseInfo = {
   const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   
 
-  console.log(createLearner());
+console.log(createLearner());
+
