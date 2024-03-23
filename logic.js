@@ -194,25 +194,23 @@ function isSubmittedOntime(assignmentId, submitted_at) { //checks if assignment 
 }
 
 function getMaxScore() { //returns current maximum score (200)
-    let maxScore = 0;// initialize maxScore that will store current maximum score
-
-    // Copy the array of assignment objects from AssignmentGroup
-    let allAssignments = [...AssignmentGroup.assignments];
+    let maxScore = 0; // initialize maxScore that will store current maximum score
+    let i = 0; // index
 
      //loop through all assignments
-    for(let assignment of allAssignments) {
-    // if an assignment is due in the future, dont use it
-        if(!isDueInTheFuture(assignment.id)) {
-            // calculate maximum score of all due assignments
+    while (i < AssignmentGroup.assignments.length) {
+        const assignment = AssignmentGroup.assignments[i];
+        
+          // if an assignment is due in the future, dont use it
+        if (!isDueInTheFuture(assignment.id)) {
             maxScore += assignment.points_possible;
-        } else {
-            // console.log('Im inside getMaxScore() \'else\' statement');
-            continue;
         }
+        i++; // move onto the next index
     }
     // console.log(maxScore);
     return maxScore;
 }
+
 
 function populateAverageScore(allScores, maxScore) {
     //initialize total score that will store sum of all scores
@@ -266,37 +264,54 @@ function validInput() {
     createLearner();
     console.log(Learner.getAllInstances());
 }
-  
-  function getLearnerData(course, AssignmentGroup, LearnerSubmissions) {
 
-    let courseInfoName = ([...CourseInfo.name]).join('');
-
-    let AssignmentGroupCopy = [...AssignmentGroup.assignments];
-    let LearnerSubmissionsCopy = [...LearnerSubmissions];
+function isCourseInputValid(course) {
+    const courseInfoName = ([...CourseInfo.name]).join('');
 
     if(course===courseInfoName){
-        validInput();
+        return true;
     } else {
-        console.log(`Entered course ${course} is not a valid input.`);
+        console.log(`Entered course '${course}' is not a valid input.`);
+        return false;
     }
+}
+
+function isAssignmentGroupValid(ags) {
+    const AssignmentGroupId = AssignmentGroup.id;
+
+    if(ags===AssignmentGroupId){
+        return true;
+    } else {
+        console.log(`Entered Assignment Group Id '${ags}' is not a valid input.`);
+        return false;
+    }
+}
+
+function isLearnerSubmissionsValid(submissions) {
+    const LearnerIdArray = getLearnerIdArray(LearnerSubmissions);
+
+    if(LearnerIdArray.includes(submissions)){
+        return true;
+    } else {
+        console.log(`Entered Learner Id '${submissions}' is not a valid input.`);
+        return false;
+    }
+}
+  
+function getLearnerData(course, ags, submissions) {
+    try {
+        if (isCourseInputValid(course) && isAssignmentGroupValid(ags) && isLearnerSubmissionsValid(submissions)) {
+            validInput();
+        } else {
+            throw new Error();
+        }
+    } catch (error) {
+        console.log('There was an error with one of the inputs.');
+    }
+}
 
 
-    // const result = [
-    //   {
-    //     id: 125,
-    //     avg: 0.985, // (47 + 150) / (50 + 150) 
-    //     1: 0.94, // 47 / 50                
-    //     2: 1.0 // 150 / 150              
-    //   },
-    //   {
-    //     id: 132,
-    //     avg: 0.82, // (39 + 125) / (50 + 150)    
-    //     1: 0.78, // 39 / 50              
-    //     2: 0.833 // late: (140 - 15) / 150 
-    //   }
-    // ];
-  }
 let maxScore = getMaxScore();
-const result = getLearnerData("Introduction to JavaScript", AssignmentGroup, LearnerSubmissions);
+const result = getLearnerData("Introduction to JavaScript", 12345, 125);
   
 console.log(result);
