@@ -335,7 +335,6 @@ function isLearnerSubmissionsValid(submissions) { // checks if entered Learner S
     return true;
 }
     
-  
 function getLearnerData(course, ags, submissions) {
     try {
         if (isCourseInputValid(course) && isAssignmentGroupValid(ags) && isLearnerSubmissionsValid(submissions)) {
@@ -347,7 +346,6 @@ function getLearnerData(course, ags, submissions) {
         console.log('There was an error with one of the inputs.');
     }
 }
-
 
 let maxScore = getMaxScore();
 const result = getLearnerData("Introduction to JavaScript", 12345, LearnerSubmissions);
