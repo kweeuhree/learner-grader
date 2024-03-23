@@ -133,13 +133,11 @@ function populateAllScores(learnerId, LearnerSubmissions) { // populates Learner
     let LearnerSubmissionsCopy = LearnerSubmissions.slice();
     let scoresArray = []; // initialize an array that will store all scores
 
-    // loop through LearnerSubmissions
-    for(let object of LearnerSubmissionsCopy) {
-        //continue if due date is in the future
-        if(isDueInTheFuture(object.assignment_id)) {
-            continue;
-        } else {
-         // don't use IDs that dont match
+    // filter out all assignments that are due in the future
+    const notDueInTheFuture = LearnerSubmissionsCopy.filter(object => isDueInTheFuture(object.assignment_id) === false);
+    // console.log(notDueInTheFuture);
+
+    for(let object of notDueInTheFuture) {
         if(learnerId!==object.learner_id) {
             continue;
         //if ids match,  pass learner id, assignment id and submission date into a function that will return 
@@ -155,7 +153,7 @@ function populateAllScores(learnerId, LearnerSubmissions) { // populates Learner
             // console.log('This score has been adjusted: ', object.submission.score, ', Deducted score is: ',deductedScore);
         }
       }
-    }
+
     // console.log(`Assignments array after for loop: ${scoresArray}`);
     return scoresArray;
   }
@@ -287,7 +285,6 @@ function calculateAvgAssignmentScore(score, id) { // returns Learner average ass
 
 function validInput() { // calls createLearner() and prints all Learner instances to console
     createLearner();
-    console.log(Learner.getAllInstances());
 }
 
 function isCourseInputValid(course) { // checks if entered course equals valid course name
@@ -339,6 +336,7 @@ function getLearnerData(course, ags, submissions) {
     try {
         if (isCourseInputValid(course) && isAssignmentGroupValid(ags) && isLearnerSubmissionsValid(submissions)) {
             validInput();
+            console.log(Learner.getAllInstances());
         } else {
             throw new Error();
         }
@@ -350,4 +348,5 @@ function getLearnerData(course, ags, submissions) {
 let maxScore = getMaxScore();
 const result = getLearnerData("Introduction to JavaScript", 12345, LearnerSubmissions);
   
-console.log(result);
+// console.log(result);
+// console.log(5+5)
