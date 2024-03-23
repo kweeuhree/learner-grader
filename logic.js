@@ -285,6 +285,7 @@ function calculateAvgAssignmentScore(score, id) { // returns Learner average ass
 
 function validInput() { // calls createLearner() and prints all Learner instances to console
     createLearner();
+    console.log(Learner.getAllInstances());
 }
 
 function isCourseInputValid(course) { // checks if entered course equals valid course name
@@ -335,8 +336,9 @@ function isLearnerSubmissionsValid(submissions) { // checks if entered Learner S
 function getLearnerData(course, ags, submissions) {
     try {
         if (isCourseInputValid(course) && isAssignmentGroupValid(ags) && isLearnerSubmissionsValid(submissions)) {
-            validInput();
-            console.log(Learner.getAllInstances());
+
+            return validInput();
+
         } else {
             throw new Error();
         }
@@ -348,5 +350,5 @@ function getLearnerData(course, ags, submissions) {
 let maxScore = getMaxScore();
 const result = getLearnerData("Introduction to JavaScript", 12345, LearnerSubmissions);
   
-// console.log(result);
-// console.log(5+5)
+console.log(result); // <--- uncommenting this leads to 'undefined' being printed to the console
+
