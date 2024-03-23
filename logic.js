@@ -185,13 +185,17 @@ function isDueInTheFuture(assignmentId) { //checks date based on assignment ID
 }
 
 function isSubmittedOntime(assignmentId, submitted_at) { //checks if assignment was submitted on time
-    let isOnTime; 
+    let isOnTime; // initialize a variable that will store result boolean
 
+    //get assignment due date
     const dueDate = new Date(AssignmentGroup.assignments[assignmentId - 1].due_at);
     // console.log(`Due date for ${assignmentId} is ${dueDate}`)
+
+    //get submission date
     const submittedDate = new Date(submitted_at);
     // console.log(`It was submitted at ${submittedDate}, by a learner with id ${learnerId}`);
 
+    //if submitted on time return true
     if(submittedDate <= dueDate) {
         // console.log('returned true');
         // console.log('---------------');
@@ -215,18 +219,24 @@ function getMaxScore() { //returns current maximum score (200)
         
           // if an assignment is due in the future, dont use it
         if (!isDueInTheFuture(assignment.id)) {
+            //add best possible points
             maxScore += assignment.points_possible;
         }
         i++; // move onto the next index
+    }
+
+    //warn if maxScore is zero
+    if(maxScore === 0) {
+        console.log(`Error. Maximum possible score for one of the assignments equals zero.`)
     }
     // console.log(maxScore);
     return maxScore;
 }
 
-function populateAverageScore(allScores, maxScore) {
+function populateAverageScore(allScores, maxScore) { // returns Learner total average score
     //initialize total score that will store sum of all scores
     let totalScore = 0;
-    let allScoresCopy = [...allScores]; 
+    let allScoresCopy = [...allScores]; // copy scores array to avoid modifying it
 
     //get sum of all learners scores
     for(let score of allScoresCopy) {
@@ -234,77 +244,86 @@ function populateAverageScore(allScores, maxScore) {
     }
 
     // calculate average, round to 2 and convert back to a number
-    const averageScore = parseFloat((totalScore / maxScore).toFixed(2)); // result given in the sandbox is inconsistent, i use 2
+    const averageScore = parseFloat((totalScore / maxScore).toFixed(2)); 
 
     return averageScore;
   }
 
-function populateAssignments(allScores) {
-    //should return an object of assignments
-    // each assignment object should have id:learner score average
+function populateAssignments(allScores) {// returns key:value pairs of Learner assignments and relevant average scores
 
-
+    // copy all scores array to avoid modifying it
     let allScoresCopy = [...allScores];
-    const assignments = {};
-    let id = 1;
+    const assignments = {}; // initialize object that will store key value pairs
+    let id = 1; // initialize id counter
 
+    //loop through scores
     for(let score of allScoresCopy) {
-        score = calculateAvgAssignmentScore(score, id);
-        assignments[id] = score;
-        id +=1;
+        score = calculateAvgAssignmentScore(score, id); // pass score and its id to calculate average score
+        assignments[id] = score; // assign a key:value pair
+        id +=1; // increment id
     }
 
     return assignments;
 }
 
-function calculateAvgAssignmentScore(score, id) {
-    //get best possible points by slicing an object by id
+function calculateAvgAssignmentScore(score, id) { // returns Learner average assignment score
+    //copy assignment group array to avoid modifying it
     let AssignmentGroupCopy = [...AssignmentGroup.assignments];
 
+    //to get maximum of possible points filter assignment group by assignment id and map possible points
     const maxPointsPossible = AssignmentGroupCopy.filter(assignment => assignment.id === id)
-    .map(assignment => assignment.points_possible);
+    .map(assignment => assignment.points_possible)[0];
 
-    const result = score / maxPointsPossible;
+    console.log(maxPointsPossible);
 
-    // console.log(`Average score is ${result}, learner score: ${score}, and id of assignment: ${id}`);
-
-    return result;
+    if (maxPointsPossible===0) {
+        console.log(`Error. Assignment with ${id} ID has 0 maximum possible points.`);
+        throw new Error();
+    } else if (maxPointsPossible!==0){
+        const result = score / maxPointsPossible;
+        return result;
+    }    
 }
 
-function validInput() {
+function validInput() { // calls createLearner() and prints all Learner instances to console
     createLearner();
     console.log(Learner.getAllInstances());
 }
 
-function isCourseInputValid(course) {
+function isCourseInputValid(course) { // checks if entered course equals valid course name
+    // get course name
     const courseInfoName = ([...CourseInfo.name]).join('');
 
+    // if entered input equals course name return true
     if(course===courseInfoName){
         return true;
     } else {
-        console.log(`Entered course '${course}' is not a valid input.`);
+        console.log(`Entered course '${course}' is not a valid input.`); // warn of invalid input
         return false;
     }
 }
 
-function isAssignmentGroupValid(ags) {
+function isAssignmentGroupValid(ags) { // checks if entered Assignment Group ID equals valid Assignment Group ID
+    // get valid id
     const AssignmentGroupId = AssignmentGroup.id;
 
+    //compare entered id to the valid id, return true if equal
     if(ags===AssignmentGroupId){
         return true;
     } else {
-        console.log(`Entered Assignment Group Id '${ags}' is not a valid input.`);
+        console.log(`Entered Assignment Group Id '${ags}' is not a valid input.`); // warn of invalid input
         return false;
     }
 }
 
-function isLearnerSubmissionsValid(submissions) {
+function isLearnerSubmissionsValid(submissions) { // checks if entered Learner ID equals valid Learner ID
     const LearnerIdArray = getLearnerIdArray(LearnerSubmissions);
 
+    //check if entered id is one of valid ids, return true if so
     if(LearnerIdArray.includes(submissions)){
         return true;
     } else {
-        console.log(`Entered Learner Id '${submissions}' is not a valid input.`);
+        console.log(`Entered Learner Id '${submissions}' is not a valid input.`); // warn of invalid input
         return false;
     }
 }
