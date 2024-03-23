@@ -27,7 +27,7 @@
         <div class="input-container">
         <!-- form starts here ------>
             
-             <label for="Course Info">Course Information</label><br>
+             <label for="course-info">Course Information</label><br>
              <input 
                 type="text" 
                 class="text-input" 
@@ -37,7 +37,7 @@
 
         <!-- Number Input Container -->
         <div class="input-container">
-            <label for="Assignment Group ID">Assignment Group ID</label><br>
+            <label for="ag-id">Assignment Group ID</label><br>
              <input 
                 type="number" 
                 class="number-input" 
@@ -47,9 +47,9 @@
 
         <!-- Array Input Container -->
         <div class="input-container">
-            <label for="Learner Submissions">Learner Submissions</label><br>
+            <label for="input-array">Learner Submissions</label><br>
             <textarea 
-                id="inputArray" 
+                id="input-array" 
                 placeholder="Required key:value pairs:&#10;learner_id,&#10;assignment_id,&#10;submission:&#10;{submitted_at, score}"></textarea><br>
         </div>
 
@@ -69,6 +69,76 @@
         </div>
     </div>
     </main>
+    
+    <div class="sample-data" onclick="openSampleData()">Sample Data</div>
+      <div class="sample-data-hidden">
+        <div class="sample-data-segment">
+            <pre>
+// The provided course information.
+const CourseInfo = {
+    id: 451,
+    name: "Introduction to JavaScript"
+ };
+            </pre>
+
+            <pre>
+const AssignmentGroup = {
+    id: 12345,
+    name: "Fundamentals of JavaScript",
+    course_id: 451,
+
+ };
+            </pre>
+        </div>
+        <div class="sample-data-segment">
+            
+// The provided learner submission data.
+const LearnerSubmissions = [{
+    learner_id: 125,
+    assignment_id: 1,
+    submission: {
+        submitted_at: "2023-01-25",
+        score: 47
+          }
+    },
+       {
+    learner_id: 125,
+    assignment_id: 2,
+    submission: {
+       submitted_at: "2023-02-12",
+       score: 150
+         }
+    },
+       {
+    learner_id: 125,
+    assignment_id: 3,
+    submission: {
+      submitted_at: "2023-01-25",
+      score: 400
+         }
+    },
+      {
+    learner_id: 132,
+    assignment_id: 1,
+    submission: {
+           submitted_at: "2023-01-24",
+           score: 39
+          }
+    },
+      {
+    learner_id: 132,
+    assignment_id: 2,
+    submission: {
+      submitted_at: "2023-03-07",
+      score: 140
+          }
+        }
+  ];
+            
+        </div>
+      </div>
+    
+    
     <footer>
         Veronika Kolesnikova for Per Scholas Skills Based Assessment, 2024
     </footer>

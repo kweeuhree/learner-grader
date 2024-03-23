@@ -1,6 +1,6 @@
 <h2>SBA 308: JavaScript Fundamentals</h2>
-<h5>Summary:</h5>
-<p>This repository contains a code solution to a Skills Based Assessment on JavaScript Fundamentals[logic.js](logic.js), as well as a simple [application](https://kweeuhree.github.io/sba-308/) that implements that logic.</p>
+<h3>Summary:</h3>
+This repository contains a code solution to a Skills Based Assessment on JavaScript Fundamentals <code>logic.js</code>, as well as a simple application that implements that logic. Currently, application does not work, because I dont know how to parse array input.
 <p>A special attention has been paid to make sure all variable names have relevant semantic reflection.</p>
 <p><code>getLearnerData()</code> takes three arguments that have to be entered without typos, as input undergoes basic validation. The first argument must be a valid course name, which is "Introduction to JavaScript". The second argument must be a valid Assignment Group ID, or 12345. The third argument must be a Learner Submissions Array, consisting of objects with following properties: <code>learner_id</code>, <code>assignment_id</code>, <code>submission.submitted_at</code>, and <code>submission.score</code>. Any other inputs will raise an error.</p>
 <p>If any of the given assignments in the Assignment Group has a maximum possible points of 0, the program will throw an error.</p>
