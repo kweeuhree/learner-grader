@@ -5,12 +5,73 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>SBA 308</title>
-        <meta name="description" content="">
+        <meta name="description" content="Skills Based Assessment">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     </head>
     <body>
-        
+        <!-- Display three input windows, validate input, output result -->
+        <header>
+            <h1>Get Learner Data Portal</h1>
+        </header>
+
+    <!-- Main -------------------------------------------------------------------------------->
+    <main>
+    <!-- LEFT SIDE -->
+    <div class="left-side">
+        <form> 
+        <!-- Input Container -->
+        <div class="input-container">
+        <!-- form starts here ------>
+            
+             <label for="Course Info">Course Information</label><br>
+             <input 
+                type="text" 
+                class="text-input" 
+                id="course-info" 
+                placeholder="For example,  Introduction to JavaScript"><br>
+        </div>
+
+        <!-- Number Input Container -->
+        <div class="input-container">
+            <label for="Assignment Group ID">Assignment Group ID</label><br>
+             <input 
+                type="number" 
+                class="number-input" 
+                id="ag-id" 
+                placeholder="Enter a number"><br>
+        </div>
+
+        <!-- Array Input Container -->
+        <div class="input-container">
+            <label for="Learner Submissions">Learner Submissions</label><br>
+            <textarea 
+                id="inputArray" 
+                placeholder="Required key:value pairs:&#10;learner_id,&#10;assignment_id,&#10;submission:&#10;{submitted_at, score}"></textarea><br>
+        </div>
+
+        <!-- Button Container -->
+        <div class="button-container">
+            <button onclick="validateInput()">SUBMIT</button>
+        </div>
+            </form>
+        <!-- form ends here ------>
+    </div>
+    
+    <!-- RIGHT SIDE -->
+    <div class="right-side">
+
+        <div class="result-output-container">
+            <div class="result"></div>
+        </div>
+    </div>
+    </main>
+    <footer>
+        Veronika Kolesnikova for Per Scholas Skills Based Assessment, 2024
+    </footer>
         <script src="app.js" async defer></script>
     </body>
 </html>

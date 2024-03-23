@@ -336,7 +336,6 @@ function isLearnerSubmissionsValid(submissions) { // checks if entered Learner S
 function getLearnerData(course, ags, submissions) {
     try {
         if (isCourseInputValid(course) && isAssignmentGroupValid(ags) && isLearnerSubmissionsValid(submissions)) {
-
             return validInput();
 
         } else {
@@ -350,5 +349,5 @@ function getLearnerData(course, ags, submissions) {
 let maxScore = getMaxScore();
 const result = getLearnerData("Introduction to JavaScript", 12345, LearnerSubmissions);
   
-console.log(result); // <--- uncommenting this leads to 'undefined' being printed to the console
+// console.log(result); // <--- uncommenting this leads to 'undefined' being printed to the console
 
