@@ -1,5 +1,9 @@
 <h2>SBA 308: JavaScript Fundamentals</h2>
 <p>This repository contains code solution to a Skills Based Assessment on JavaScript Fundamentals.</p>
+<p><code>getLearnerData()</code> takes three arguments that have to be entered without typos, as input undergoes basic validation.</p>
+<p>The main logic revolves around Learner class, that holds individually relevant information. All instances of class are kept in a static <code>instances</code> array.</p>
+<p>The code is fragmented into functions which in turn allows for easier testing.</p>
+<p><code>IsDueInTheFuture()</code> is used in two other functions: <code>populateAllScores()</code>, and <code>getMaxScore()</code>. This is a very simple function that does only one thing: based on a parameter, it checks whether due date of an assignment is in the future</p>.
 <hr>
 <h2>Requirements</h2>
 <ul>
