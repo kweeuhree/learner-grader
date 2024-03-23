@@ -1,7 +1,7 @@
 // Define a class Learner that will store leaner id, assingments and course id,
 //  as well as relevant getters
 class Learner {
-    static instances = [];
+    static instances = []; // keep a static array of all Learner instances
 
     constructor(id) {
         this.id = id;
@@ -31,7 +31,7 @@ const CourseInfo = {
   };
   
   // The provided assignment group.
-  const AssignmentGroup = {
+const AssignmentGroup = {
     id: 12345,
     name: "Fundamentals of JavaScript",
     course_id: 451,
@@ -59,7 +59,7 @@ const CourseInfo = {
   };
   
   // The provided learner submission data.
-  const LearnerSubmissions = [
+const LearnerSubmissions = [
     {
       learner_id: 125,
       assignment_id: 1,
@@ -102,66 +102,78 @@ const CourseInfo = {
     }
   ];
 
-  function getLearnerIdArray(LearnerSubmissions) { // returns [125, 132]
+function getLearnerIdArray(LearnerSubmissions) { // returns [125, 132]
+    // Copy LearnerSubmissions array to avoid modifying the  original array
     let LearnerSubmissionsCopy = LearnerSubmissions.slice();
-    let LearnerIdArray = []; 
+    let LearnerIdArray = []; // initialize an array that will store IDs of all Learners
 
-    
+    // loop through LearnerSubmissions array
     for(let learnerObject of LearnerSubmissionsCopy) {
         if(!LearnerIdArray.includes(learnerObject.learner_id)) {
-            LearnerIdArray.push(learnerObject.learner_id);
+            LearnerIdArray.push(learnerObject.learner_id); // push IDs that aren't already in the array
         }
     }
     // console.log(LearnerIdArray);
     return LearnerIdArray;
   }
 
-  function createLearner() { // creates Learners based off their ID
+function createLearner() { // creates Learners based off their ID
+    // get array of all Learner IDs
     const learnerIdArray = getLearnerIdArray(LearnerSubmissions); 
 
     for(let learner of learnerIdArray) {
-        learner = new Learner(learner);
+        learner = new Learner(learner); // instantiate new Learner based off ID
         // console.log(learner);
     }
   }
 
-function populateAllScores(learnerId, LearnerSubmissions) { //populates assignments
+function populateAllScores(learnerId, LearnerSubmissions) { // populates Learner scores
 
     // copy the array in order to keep it unchanged
     let LearnerSubmissionsCopy = LearnerSubmissions.slice();
-    let assignmentsArray = [];
+    let scoresArray = []; // initialize an array that will store all scores
 
+    // loop through LearnerSubmissions
     for(let object of LearnerSubmissionsCopy) {
-        //continue if due date is larger than today
+        //continue if due date is in the future
         if(isDueInTheFuture(object.assignment_id)) {
             continue;
         } else {
-         //if ids match, pass learner id, assignment id and submission date into a function that will return 
-        // whether the submission was on time
+         // don't use IDs that dont match
         if(learnerId!==object.learner_id) {
-            continue
+            continue;
+        //if ids match,  pass learner id, assignment id and submission date into a function that will return 
+        // whether the submission was on time
         } else if(learnerId === object.learner_id && isSubmittedOntime(object.assignment_id, object.submission.submitted_at)) {
             //if on time push regular score
-            assignmentsArray.push(object.submission.score);
+            scoresArray.push(object.submission.score);
             // console.log('This score hasnt been adjusted: ', object.submission.score);
         } else {
-            // deduct 10% and push adjusted score
-            let deductedScore = Math.floor(object.submission.score - (object.submission.score*0.1)); 
-            assignmentsArray.push(deductedScore);
+            // if submitted late, deduct 10% and push adjusted score
+            let deductedScore = calculatePenalty(object.submission.score); 
+            scoresArray.push(deductedScore);
             // console.log('This score has been adjusted: ', object.submission.score, ', Deducted score is: ',deductedScore);
         }
       }
     }
-    // console.log(`Assignments array after for loop: ${assignmentsArray}`);
-    return assignmentsArray;
+    // console.log(`Assignments array after for loop: ${scoresArray}`);
+    return scoresArray;
   }
 
+function calculatePenalty(score) { // returns adjusted score if assignment was submitted late
+    // deduct 10% from original score
+    const adjustedScore = Math.floor(score - (score*0.1));
+
+    return adjustedScore;
+}
+
 function isDueInTheFuture(assignmentId) { //checks date based on assignment ID
-    let isTrue;
+    let isTrue; // initialize a variable that will store result boolean
 
-    const today = new Date();
-    const dueDate = new Date(AssignmentGroup.assignments[assignmentId - 1].due_at);
+    const today = new Date(); // get todays date
+    const dueDate = new Date(AssignmentGroup.assignments[assignmentId - 1].due_at); // gue assignment due date
 
+    // if due in the future return true
     if(dueDate > today) {
         isTrue = true;
         // console.log('Returned true inside isDueIntheFuture()');
@@ -210,7 +222,6 @@ function getMaxScore() { //returns current maximum score (200)
     // console.log(maxScore);
     return maxScore;
 }
-
 
 function populateAverageScore(allScores, maxScore) {
     //initialize total score that will store sum of all scores

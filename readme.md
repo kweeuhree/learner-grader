@@ -15,7 +15,7 @@
 <li>Used try/catch statements to manage potential invalid data being fed into the program.</li>
 <li>Utilizing multiple for loops and a while loop.</li>
 <li>Utilizing loop control keyword continue (ex. <code>populateAllScores()</code>).</li>
-<li>Created and manipulate arrays and objects.</li>
+<li>Created and manipulated arrays and objects.</li>
 <li>Demonstrated the retrieval, manipulation, and removal of items in an array or properties in an object.</li>
 <li>Used functions to handle repeated tasks.</li>
 <li>Program outputs all instances of class Learner formatted as per given example.</li>
