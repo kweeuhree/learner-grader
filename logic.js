@@ -274,7 +274,7 @@ function calculateAvgAssignmentScore(score, id) { // returns Learner average ass
     const maxPointsPossible = AssignmentGroupCopy.filter(assignment => assignment.id === id)
     .map(assignment => assignment.points_possible)[0];
 
-    console.log(maxPointsPossible);
+    // console.log(maxPointsPossible);
 
     if (maxPointsPossible===0) {
         console.log(`Error. Assignment with ${id} ID has 0 maximum possible points.`);
@@ -316,17 +316,25 @@ function isAssignmentGroupValid(ags) { // checks if entered Assignment Group ID 
     }
 }
 
-function isLearnerSubmissionsValid(submissions) { // checks if entered Learner ID equals valid Learner ID
-    const LearnerIdArray = getLearnerIdArray(LearnerSubmissions);
-
-    //check if entered id is one of valid ids, return true if so
-    if(LearnerIdArray.includes(submissions)){
-        return true;
-    } else {
-        console.log(`Entered Learner Id '${submissions}' is not a valid input.`); // warn of invalid input
-        return false;
+function isLearnerSubmissionsValid(submissions) { // checks if entered Learner Submissions has needed properties
+    for(let object of submissions) {
+        if(!object.hasOwnProperty('learner_id')) {
+            console.log(`Error. Learner Submissions is missing learner ID.\n`, object);
+            throw new Error();
+        } else if(!object.hasOwnProperty('assignment_id')) {
+            console.log(`Error. Learner Submissions is missing assignment ID.\n`, object);
+            throw new Error();
+        } else if(!object.submission.hasOwnProperty('submitted_at')) {
+            console.log(`Error. Learner Submissions is missing assignment submission date.\n`, object);
+            throw new Error();
+        } else if(!object.submission.hasOwnProperty('score')) {
+            console.log(`Error. Learner Submissions is missing assignment submission score.\n`, object);
+            throw new Error();
+        } 
     }
+    return true;
 }
+    
   
 function getLearnerData(course, ags, submissions) {
     try {
@@ -342,6 +350,6 @@ function getLearnerData(course, ags, submissions) {
 
 
 let maxScore = getMaxScore();
-const result = getLearnerData("Introduction to JavaScript", 12345, 125);
+const result = getLearnerData("Introduction to JavaScript", 12345, LearnerSubmissions);
   
 console.log(result);
