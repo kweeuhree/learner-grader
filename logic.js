@@ -1,4 +1,4 @@
-// Define a class Learner that will store leaner id, assingments and course id,
+// Define a class Learner that will store learner id, assignments and course id,
 //  as well as relevant getters
 class Learner {
     static instances = []; // keep a static array of all Learner instances
