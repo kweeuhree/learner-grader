@@ -338,11 +338,17 @@ function isLearnerSubmissionsValid(submissions) { // checks if entered Learner S
 }
 
 function parseInput(text) {
+    // console.log(text, '\ninside parseInput()');
+    // console.log(typeof text)
     // Split the text content of the textarea by newline character
-    const lines = text.split('},{');
-    console.log(lines)
+    text = JSON.stringify(text);
+    let lines = JSON.parse(text);
+    lines = lines.split(';')
+    // console.log(lines, '\nprinting lines inside parseInput()');
+    // console.log(typeof lines)
     // Initialize an array to store parsed objects
-    const submissions = [];
+    let submissions = [];
+    // console.log(submissions, '\nsubmissions, inside parseInput()');
 
     // Iterate over each line and parse the data into objects
     lines.forEach(line => {
@@ -358,11 +364,12 @@ function parseInput(text) {
         const fields = line.split(',');
 
         // Extract values for learner_id, assignment_id, submitted_at, and score
-        const learner_id = parseInt(fields[0].trim());
-        const assignment_id = parseInt(fields[1].trim());
-        
-        const submitted_at = fields[2].trim();
-        const score = parseInt(fields[3].trim());
+        const learner_id = parseInt(fields[0].split(':')[1].trim());
+        const assignment_id = parseInt(fields[1].split(':')[1].trim());      
+        const submitted_at = fields[2].split(':')[1].trim();
+        const score = parseInt(fields[3].split(':')[1].trim());
+
+        // console.log(`learner id: ${learner_id}, assg id: ${assignment_id}, submitted at: ${submitted_at}, score: ${score}`)
 
         // Construct an object with the extracted values
         const data = {
@@ -373,7 +380,7 @@ function parseInput(text) {
                 score: score
             }
         };
-
+        // console.log(data, ': data')
         // Add the parsed object to the submissions array
         submissions.push(data);
     });
@@ -412,12 +419,48 @@ function openSampleData() {
     }
 }
 
-function validateInput() {
+function validateInput(e) {
+    e.preventDefault();
     const courseInput = document.querySelector('#course-info').value;
     const assignmentGroupId = document.querySelector('#ag-id').value;
     let LearnerSubmissionsArray = document.querySelector('#input-array').value;
 
     let displayData = document.querySelector('.result');
-
-    displayData.innerHTML = getLearnerData(courseInput, assignmentGroupId, LearnerSubmissionsArray);
+ 
+    getLearnerData(courseInput, assignmentGroupId, LearnerSubmissionsArray);
+    let toDisplay = JSON.stringify(Learner.getAllInstances());
+    toDisplay = toDisplay.slice(1, -1); // Remove square brackets
+    toDisplay = toDisplay.replaceAll(/},{/g, '}\n{'); // Add newline between objects
+    displayData.innerHTML = toDisplay;
 }
+
+// function validateInput(e) {
+//     e.preventDefault();
+//     let LearnerSubmissionsArray = document.querySelector('#array-input').value;
+
+//     let displayData = document.querySelector('.result');
+
+//     displayData.innerHTML = isLearnerSubmissionsValid(LearnerSubmissionsArray);
+// }
+
+// function isLearnerSubmissionsValid(submissions) { // checks if entered Learner Submissions has needed properties
+//     submissions = parseInput(submissions);
+//     // console.log(submissions, '\n inside isLearnerSubmissionsValid()');
+//     for(let object of submissions) {
+//         if(!object.hasOwnProperty('learner_id')) {
+//             console.log(`Error. Learner Submissions is missing learner ID.\n`, object);
+//             throw new Error();
+//         } else if(!object.hasOwnProperty('assignment_id')) {
+//             console.log(`Error. Learner Submissions is missing assignment ID.\n`, object);
+//             throw new Error();
+//         } else if(!object.submission.hasOwnProperty('submitted_at')) {
+//             console.log(`Error. Learner Submissions is missing assignment submission date.\n`, object);
+//             throw new Error();
+//         } else if(!object.submission.hasOwnProperty('score')) {
+//             console.log(`Error. Learner Submissions is missing assignment submission score.\n`, object);
+//             throw new Error();
+//         } 
+//     }
+//     return true;
+// }
+
