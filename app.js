@@ -428,39 +428,18 @@ function validateInput(e) {
     let displayData = document.querySelector('.result');
  
     getLearnerData(courseInput, assignmentGroupId, LearnerSubmissionsArray);
-    let toDisplay = JSON.stringify(Learner.getAllInstances());
-    toDisplay = toDisplay.slice(1, -1); // Remove square brackets
-    toDisplay = toDisplay.replaceAll(/},{/g, '}\n{'); // Add newline between objects
-    displayData.innerHTML = toDisplay;
+    let unformattedData = Learner.getAllInstances(); // Array of objects
+
+    let formattedData = [];
+    for(let object of unformattedData) {
+        const formattedString = `Learner ID: ${object.id}, <br>Average Score: ${object.averageScore},<br>All assignments: ${JSON.stringify(object.allAssignments)}`;
+        formattedData.push(formattedString);
+        console.log(formattedString)
+    }
+
+    // Convert formattedData to a string for display
+    let formattedString = formattedData.join('<br>');
+    displayData.innerHTML = formattedString;
 }
 
-// function validateInput(e) {
-//     e.preventDefault();
-//     let LearnerSubmissionsArray = document.querySelector('#array-input').value;
-
-//     let displayData = document.querySelector('.result');
-
-//     displayData.innerHTML = isLearnerSubmissionsValid(LearnerSubmissionsArray);
-// }
-
-// function isLearnerSubmissionsValid(submissions) { // checks if entered Learner Submissions has needed properties
-//     submissions = parseInput(submissions);
-//     // console.log(submissions, '\n inside isLearnerSubmissionsValid()');
-//     for(let object of submissions) {
-//         if(!object.hasOwnProperty('learner_id')) {
-//             console.log(`Error. Learner Submissions is missing learner ID.\n`, object);
-//             throw new Error();
-//         } else if(!object.hasOwnProperty('assignment_id')) {
-//             console.log(`Error. Learner Submissions is missing assignment ID.\n`, object);
-//             throw new Error();
-//         } else if(!object.submission.hasOwnProperty('submitted_at')) {
-//             console.log(`Error. Learner Submissions is missing assignment submission date.\n`, object);
-//             throw new Error();
-//         } else if(!object.submission.hasOwnProperty('score')) {
-//             console.log(`Error. Learner Submissions is missing assignment submission score.\n`, object);
-//             throw new Error();
-//         } 
-//     }
-//     return true;
-// }
 

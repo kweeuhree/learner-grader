@@ -285,7 +285,20 @@ function calculateAvgAssignmentScore(score, id) { // returns Learner average ass
 
 function validInput() { // calls createLearner() and prints all Learner instances to console
     createLearner();
-    console.log(Learner.getAllInstances());
+    let unformattedData = Learner.getAllInstances();
+    let formattedData = []
+
+    for(let object of unformattedData) {
+        const formattedObject = {
+            LearnerID: object.id,
+            AvgScore: object.averageScore,
+            AllAssignments: object.allAssignments
+        };
+        formattedData.push(formattedObject);
+        // console.log(formattedObject)
+    }
+
+    console.log(formattedData);
 }
 
 function isCourseInputValid(course) { // checks if entered course equals valid course name
@@ -336,7 +349,7 @@ function isLearnerSubmissionsValid(submissions) { // checks if entered Learner S
 function getLearnerData(course, ags, submissions) {
     try {
         if (isCourseInputValid(course) && isAssignmentGroupValid(ags) && isLearnerSubmissionsValid(submissions)) {
-            return validInput();
+            validInput();
 
         } else {
             throw new Error();

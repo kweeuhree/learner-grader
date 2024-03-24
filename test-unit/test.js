@@ -1,10 +1,21 @@
 function validateInput(e) {
-    e.preventDefault();
+    // e.preventDefault();
     let LearnerSubmissionsArray = document.querySelector('#array-input').value;
-
     let displayData = document.querySelector('.result');
 
-    displayData.innerHTML = isLearnerSubmissionsValid(LearnerSubmissionsArray);
+    let unformattedData = isLearnerSubmissionsValid(LearnerSubmissionsArray);
+
+    let formattedData = [];
+    console.log(unformattedData)
+    for(let object of unformattedData) {
+        const formattedString = `learnerId: ${object.learner_id}, avg: ${object.averageScore}, allAssignments: ${JSON.stringify(object.allAssignments)}`;
+        formattedData.push(formattedString);
+        console.log(formattedString)
+    }
+
+    // Convert formattedData to a string for display
+    let formattedString = formattedData.join('<br>');
+    displayData.innerHTML = formattedString;
 }
 
 function isLearnerSubmissionsValid(submissions) { // checks if entered Learner Submissions has needed properties

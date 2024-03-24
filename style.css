@@ -138,6 +138,9 @@ button {
 
 .sample-data-segment {
     text-align: left;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    width: 50%;
 }
 
 footer {
